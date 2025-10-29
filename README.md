@@ -29,15 +29,14 @@ LEAPD_Pipeline_Python/
 ├── main_train.py
 ├── main_test.py
 ├── demo_leapd.ipynb
-├── src/
-│   └── leapd/
-│       ├── data_io.py
-│       ├── signal.py
-│       ├── geom.py
-│       ├── metrics.py
-│       ├── combos.py
-│       ├── plot_utils.py
-│       └── __init__.py
+├── utils/
+│   ├── data_io.py
+│   ├── signal.py
+│   ├── geom.py
+│   ├── metrics.py
+│   ├── combos.py
+│   ├── plot_utils.py
+│   └── __init__.py
 ├── figures/
 ├── results/
 │   ├── train_results/
