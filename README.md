@@ -28,20 +28,7 @@ The pipeline now includes a dedicated **EEG Preprocessing module (MNE-based)**, 
 
 ## Repository Structure
 ```
-LEAPD_Pipeline_Python/
-<<<<<<< HEAD
-├── main_train.py
-├── main_test.py
-├── demo_leapd.ipynb
-├── utils/
-│   ├── data_io.py
-│   ├── signal.py
-│   ├── geom.py
-│   ├── metrics.py
-│   ├── combos.py
-│   ├── plot_utils.py
-│   └── __init__.py
-=======
+LEAPD_Pipeline_Python
 │
 ├── Preprocessing/                  # EEG cleaning module (MNE-based)
 │   ├── demo_preprocessing.py
@@ -56,17 +43,15 @@ LEAPD_Pipeline_Python/
 ├── main_test.py                    # LEAPD testing script
 ├── demo_leapd.ipynb                # Jupyter demo (end-to-end)
 │
-├── src/
-│   └── leapd/
-│       ├── data_io.py
-│       ├── signal.py
-│       ├── geom.py
-│       ├── metrics.py
-│       ├── combos.py
-│       ├── plot_utils.py
-│       └── __init__.py
+├── utils/
+│   ├── data_io.py
+│   ├── signal.py
+│   ├── geom.py
+│   ├── metrics.py
+│   ├── combos.py
+│   ├── plot_utils.py
+│   └── __init__.py
 │
->>>>>>> 52ec18d (Add Preprocessing module and update LICENSE and README)
 ├── figures/
 ├── results/
 │   ├── train_results/
