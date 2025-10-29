@@ -26,18 +26,28 @@ def pipeline_preprocessing(X, Fs, labels,
         raw = mne.io.RawArray(X.T, info)
         raw.set_montage("standard_1020", on_missing="ignore")
 
-        ica = mne.preprocessing.ICA(n_components=min(15, len(labels)), random_state=97)
+        # --- High-pass filter for ICA stability ---
+        raw.filter(l_freq=1.0, h_freq=None)
+
+        ica = mne.preprocessing.ICA(
+            n_components=min(15, len(labels)),
+            random_state=97
+        )
         ica.fit(raw)
 
-        # --- Handle missing EOG/ECG channels gracefully ---
+        # --- Safe EOG/ECG artifact detection ---
+        eog_inds, ecg_inds = [], []
         try:
             eog_inds, _ = ica.find_bads_eog(raw)
         except RuntimeError:
-            eog_inds = []
+            print("⚠️ No EOG channel found — skipping EOG artifact detection.")
+        except ValueError:
+            print("⚠️ EOG detection skipped (invalid channel type).")
+
         try:
             ecg_inds, _ = ica.find_bads_ecg(raw)
-        except RuntimeError:
-            ecg_inds = []
+        except (RuntimeError, ValueError):
+            print("⚠️ No ECG channel found — skipping ECG artifact detection.")
 
         ica.exclude = list(set(eog_inds + ecg_inds))
         report["artifact_ics"] = ica.exclude
@@ -52,9 +62,11 @@ def pipeline_preprocessing(X, Fs, labels,
     if save:
         tstamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         save_path = os.path.join(save_dir, f"EEG_cleaned_{tstamp}.mat")
-        sio.savemat(save_path, {"X_clean": X_clean,
-                                "labels_clean": labels,
-                                "report": report,
-                                "Fs": Fs})
+        sio.savemat(save_path, {
+            "X_clean": X_clean,
+            "labels_clean": labels,
+            "report": report,
+            "Fs": Fs
+        })
 
     return X_clean, labels, report, save_path
