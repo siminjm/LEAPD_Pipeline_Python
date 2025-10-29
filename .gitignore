@@ -1,0 +1,52 @@
+# ============================
+# Python build / runtime files
+# ============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.egg
+.venv/
+.env/
+.ipynb_checkpoints/
+*.log
+*.bak
+
+# ============================
+# Jupyter & project folders
+# ============================
+figures/
+results/**/*.json
+results/**/*.npz
+data/
+*.csv
+*.xlsx
+
+# ============================
+# MATLAB temporary and autosave files
+# ============================
+*.asv
+*.m~
+*.mex*
+*.slprj/
+*.user.mat
+*.autosave
+*.mdl.autosave
+*.slx.autosave
+
+# ============================
+# OS / editor generated files
+# ============================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ============================
+# Backups & archives
+# ============================
+*.zip
+*.tar
+*.gz
