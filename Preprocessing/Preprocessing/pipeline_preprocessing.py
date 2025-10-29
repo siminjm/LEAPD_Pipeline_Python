@@ -1,0 +1,37 @@
+import os, numpy as np, mne, scipy.io as sio, datetime
+from detect_noisy_channels import detect_noisy_channels
+from remove_line_noise import remove_line_noise
+
+def pipeline_preprocessing(X, Fs, labels,
+                           remove_line=True, use_ica=True,
+                           save=True, save_dir="cleaned_data"):
+    os.makedirs(save_dir, exist_ok=True)
+    report = {"line_noise_removed": 0, "artifact_ics": [], "bad_channels": []}
+    if remove_line:
+        X = remove_line_noise(X, Fs)
+        report["line_noise_removed"] = 1
+    bad_idx, bad_labels, _ = detect_noisy_channels(X, labels)
+    if len(bad_idx) > 0:
+        X = np.delete(X, bad_idx, axis=1)
+        labels = [lbl for i, lbl in enumerate(labels) if i not in bad_idx]
+        report["bad_channels"] = bad_labels
+    if use_ica:
+        info = mne.create_info(labels, Fs, ch_types="eeg")
+        raw = mne.io.RawArray(X.T, info)
+        raw.set_montage("standard_1020", on_missing="ignore")
+        ica = mne.preprocessing.ICA(n_components=min(15, len(labels)), random_state=97)
+        ica.fit(raw)
+        eog_inds, _ = ica.find_bads_eog(raw)
+        ecg_inds, _ = ica.find_bads_ecg(raw)
+        ica.exclude = list(set(eog_inds + ecg_inds))
+        report["artifact_ics"] = ica.exclude
+        raw_clean = ica.apply(raw.copy())
+        X_clean = raw_clean.get_data().T
+    else:
+        X_clean = X
+    save_path = ""
+    if save:
+        tstamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        save_path = os.path.join(save_dir, f"EEG_cleaned_{tstamp}.mat")
+        sio.savemat(save_path, {"X_clean": X_clean, "labels_clean": labels, "report": report, "Fs": Fs})
+    return X_clean, labels, report, save_path

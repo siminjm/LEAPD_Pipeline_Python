@@ -1,0 +1,42 @@
+# ===================================
+# Python temporary and cache files
+# ===================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.ipynb_checkpoints
+
+# ===================================
+# MNE and EEG output files
+# ===================================
+cleaned_data/
+*.mat
+*.fif
+*.edf
+*.bdf
+*.vhdr
+*.vmrk
+*.eeg
+*.csv
+*.npy
+*.npz
+
+# ===================================
+# OS / IDE files
+# ===================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+*.bak
+
+# ===================================
+# Archives and backups
+# ===================================
+*.zip
+*.tar
+*.gz
+*.7z
+*.rar
